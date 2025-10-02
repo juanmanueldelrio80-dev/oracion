@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espiritualidades Cristianas y sus Métodos</title>
+    <!-- Carga de Tailwind CSS para el estilizado -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración de Tailwind para usar la fuente Inter y un color primario -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4f46e5', // Indigo 600
+                        'secondary': '#10b981', // Emerald 500
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos personalizados para transiciones suaves */
+        .content-hidden {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            padding: 0 1rem;
+        }
+        .content-visible {
+            max-height: 1000px; /* Suficientemente grande para el contenido */
+            padding: 1rem;
+            transition: max-height 0.5s ease-in, padding 0.5s ease-in;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans p-4 sm:p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Encabezado Principal -->
+        <header class="text-center mb-10 p-6 bg-white shadow-xl rounded-2xl">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-2">
+                Explora las Espiritualidades
+            </h1>
+            <p class="text-xl text-primary font-medium">
+                Un camino interactivo para conocer los métodos de oración.
+            </p>
+            <p class="mt-4 text-gray-600">
+                Haz clic en cada tradición para ver su método central y sus pasos de práctica.
+            </p>
+        </header>
+
+        <!-- Contenedor de las Tarjetas (Acordeón) -->
+        <div id="spiritualities-container" class="space-y-6">
+            <!-- Las tarjetas se insertarán aquí por JavaScript -->
+        </div>
+
+        <!-- Pie de página -->
+        <footer class="mt-12 text-center text-gray-500 text-sm">
+            <p>&copy; 2025 Exploración de la Oración Cristiana. Información basada en las grandes tradiciones espirituales.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Datos de las espiritualidades obtenidos del texto
+        const spiritualities = [
+            {
+                name: "Ignaciana",
+                founder: "San Ignacio de Loyola",
+                focus: "Discernimiento y encontrar a Dios en todas las cosas.",
+                keyMethod: "El Examen de Conciencia y la Contemplación Imaginativa",
+                steps: [
+                    "Presencia de Dios: Recordar que estás ante Dios.",
+                    "Gratitud: Dar gracias por los dones recibidos.",
+                    "Examen del día: Repasar acciones, pensamientos, y emociones.",
+                    "Petición de perdón: Pedir perdón por las faltas.",
+                    "Propósito y compromiso: Hacer un propósito para el futuro lleno de esperanza."
+                ]
+            },
+            {
+                name: "Benedictina",
+                founder: "San Benito de Nursia",
+                focus: "Equilibrio entre Oración y Trabajo (Ora et Labora) y santificación del tiempo.",
+                keyMethod: "La Lectio Divina",
+                steps: [
+                    "Lectio (Lectura): Leer un pasaje de la Escritura lenta y atentamente.",
+                    "Meditatio (Meditación): Rumiar la Palabra para ver qué dice a la propia vida.",
+                    "Oratio (Oración): Responder a la Palabra con súplica, alabanza o arrepentimiento.",
+                    "Contemplatio (Contemplación): Reposar en la presencia amorosa de Dios, más allá de las palabras."
+                ]
+            },
+            {
+                name: "Carmelita",
+                founder: "Santa Teresa de Jesús y San Juan de la Cruz",
+                focus: "La oración como relación de amistad, un viaje al 'castillo interior' del alma.",
+                keyMethod: "La Oración Mental (de recogimiento)",
+                steps: [
+                    "Buscar un lugar de tranquilidad y una postura adecuada.",
+                    "Usar una imagen o frase de Jesús para enfocar la mente.",
+                    "Tratar con Él de amistad: conversar personalmente, sin elaborados pensamientos.",
+                    "Confiar en Su presencia y perseverar incluso en la 'sequedad espiritual'."
+                ]
+            },
+            {
+                name: "Franciscana",
+                founder: "San Francisco de Asís",
+                focus: "Alabanza a Dios a través de la creación (Cántico de las Criaturas) y la humildad en el servicio.",
+                keyMethod: "Oración de Alabanza y la Intercesión",
+                steps: [
+                    "Mirar la creación: Contemplar la naturaleza o una imagen/persona ('hermano sol', 'hermana madre tierra').",
+                    "Identificar las cualidades de bondad y belleza que reflejan a Dios.",
+                    "Alabar a Dios por Su bondad y belleza reflejada en ellas.",
+                    "Traducir la alabanza en acción humilde y servicio al prójimo (Oración de la Paz)."
+                ]
+            },
+            {
+                name: "Hesicasta",
+                founder: "Padres del Desierto",
+                focus: "Búsqueda de la quietud interior y la unificación del ser (Theosis).",
+                keyMethod: "La Oración de Jesús ('Señor Jesucristo, ten piedad de mí')",
+                steps: [
+                    "Postura de quietud: Buscar el silencio exterior e interior.",
+                    "Sincronizar la respiración con la frase de la Oración de Jesús.",
+                    "Repetir la invocación de Jesús rítmicamente.",
+                    "Llevar el intelecto de la cabeza al corazón, anclando la oración."
+                ]
+            }
+        ];
+
+        // Función para renderizar las tarjetas de espiritualidad
+        function renderSpiritualities() {
+            const container = document.getElementById('spiritualities-container');
+
+            spiritualities.forEach((spirituality, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-xl overflow-hidden border border-gray-100";
+                
+                // Toggle Button (Header)
+                const header = document.createElement('div');
+                header.className = "p-5 cursor-pointer flex justify-between items-center bg-white hover:bg-gray-50 transition duration-150";
+                header.setAttribute('role', 'button');
+                header.setAttribute('aria-expanded', 'false');
+                header.onclick = () => toggleContent(index);
+
+                // Title and Founder
+                header.innerHTML = `
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-800">${spirituality.name}</h2>
+                        <p class="text-sm text-gray-500 mt-1">Fundador: ${spirituality.founder}</p>
+                    </div>
+                    <svg id="arrow-${index}" class="w-6 h-6 text-primary transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                `;
+                card.appendChild(header);
+
+                // Content (Hidden by default)
+                const content = document.createElement('div');
+                content.id = `content-${index}`;
+                content.className = "content-hidden border-t border-gray-100";
+                
+                let stepsList = spirituality.steps.map(step => `<li class="mb-2 flex items-start">
+                    <span class="text-secondary font-bold mr-2 mt-1">•</span>
+                    <span class="text-gray-700">${step}</span>
+                </li>`).join('');
+
+                content.innerHTML = `
+                    <div class="p-4 sm:p-6 space-y-4">
+                        <p class="text-gray-600 italic">
+                            <span class="font-semibold text-gray-800">Enfoque Central:</span> ${spirituality.focus}
+                        </p>
+                        
+                        <div class="bg-primary/10 p-4 rounded-lg">
+                            <h3 class="font-bold text-lg text-primary mb-2">Método Clave</h3>
+                            <p class="text-gray-800">${spirituality.keyMethod}</p>
+                        </div>
+                        
+                        <h3 class="font-bold text-lg text-gray-800 pt-2 border-t border-gray-100">Pasos para la Práctica</h3>
+                        <ol class="list-none pl-0 text-base space-y-3">
+                            ${stepsList}
+                        </ol>
+                    </div>
+                `;
+                card.appendChild(content);
+
+                container.appendChild(card);
+            });
+        }
+
+        // Función para alternar la visibilidad del contenido
+        function toggleContent(index) {
+            const content = document.getElementById(`content-${index}`);
+            const header = content.previousElementSibling;
+            const arrow = document.getElementById(`arrow-${index}`);
+
+            const isVisible = content.classList.contains('content-visible');
+
+            // Cierra el contenido si está abierto
+            if (isVisible) {
+                content.classList.remove('content-visible');
+                content.classList.add('content-hidden');
+                header.setAttribute('aria-expanded', 'false');
+                arrow.classList.remove('rotate-180');
+            } else {
+                // Oculta todos los demás contenidos antes de abrir el actual
+                spiritualities.forEach((_, i) => {
+                    if (i !== index) {
+                        const otherContent = document.getElementById(`content-${i}`);
+                        const otherHeader = otherContent.previousElementSibling;
+                        const otherArrow = document.getElementById(`arrow-${i}`);
+
+                        if (otherContent.classList.contains('content-visible')) {
+                            otherContent.classList.remove('content-visible');
+                            otherContent.classList.add('content-hidden');
+                            otherHeader.setAttribute('aria-expanded', 'false');
+                            otherArrow.classList.remove('rotate-180');
+                        }
+                    }
+                });
+
+                // Abre el contenido seleccionado
+                content.classList.remove('content-hidden');
+                content.classList.add('content-visible');
+                header.setAttribute('aria-expanded', 'true');
+                arrow.classList.add('rotate-180');
+            }
+        }
+
+        // Inicializa la aplicación al cargar la ventana
+        window.onload = renderSpiritualities;
+    </script>
+</body>
+</html>
